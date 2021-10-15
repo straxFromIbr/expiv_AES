@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+    aesdev:
+        image: exp6_aes
+        volumes:
+            - './AES:/home'
+        command: /bin/bash -l
+        build:
+          context: .
+          dockerfile: ./Dockerfile
+          args:
+            - tag='exp6_aes'
+            - platform='linux/amd64'
+
+
+
+
+            
+
+
