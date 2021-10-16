@@ -5,11 +5,11 @@ exp1: check_affine check_multiply check_inverse check_aes_all
 	@echo done
 
 check_aes_all: aes_exp1 
-	@diff ./test1.res.txt <(./exp1)  >/dev/null || echo 'all test failed'
+	@diff ./test1.res.txt <(./exp1)  >/dev/null || echo 'ALL TEST FAILED'
 
 # 関数ごとのテスト
 check_affine: test_affine
-	@diff ./testAffine.res.txt <(./test_affine) >/dev/null || (echo 'affine failed' && false)
+	@diff ./testAffine.res.txt <(./test_affine) >/dev/null || (echo 'AFFINE FAILED' && false)
 
 test_affine: aes.o
 	$(CC) -o test_affine \
@@ -17,7 +17,7 @@ test_affine: aes.o
 		shiftrows.o mixcolumns.o addroundkey.o keyexpand1.o debug.o testAffine.o
 
 check_multiply: test_multiply
-	@diff ./testMultiply.res.txt <(./test_multiply) >/dev/null || (echo 'multiply failed' && false)
+	@diff ./testMultiply.res.txt <(./test_multiply) >/dev/null || (echo 'MULTIPLY FAILED' && false)
 
 test_multiply: aes.o
 	$(CC) -o test_multiply \
@@ -25,7 +25,7 @@ test_multiply: aes.o
 		shiftrows.o mixcolumns.o addroundkey.o keyexpand1.o debug.o testMultiply.o
 
 check_inverse: test_inverse
-	@diff ./testInverse.res.txt <(./test_inverse) >/dev/null || (echo 'inverse failed' && false)
+	@diff ./testInverse.res.txt <(./test_inverse) >/dev/null || (echo 'INVERSE FAILED' && false)
 
 test_inverse: aes.o test_multiply
 	$(CC) -o test_inverse \

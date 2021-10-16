@@ -6,4 +6,4 @@ RUN apt update && \
     apt upgrade -y && \
     apt install gcc make -y
 
-CMD /bin/bash -l
+CMD ["/usr/bin/bash","-l"]
