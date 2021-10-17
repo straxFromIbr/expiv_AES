@@ -4,7 +4,7 @@ BIN = bin
 basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
 base_sm_files = $(basefiles) subbytes.o mixcolumns.o
 TESTER = test1.o
-RESULT_FILE = "result_"$$(hostname -I | awk '{print$1}')
+RESULT_FILE = "result_"$$(hostname -I | awk '{print$$1}')
 
 to_test1:
 	$(eval TESTER := test1.o)
