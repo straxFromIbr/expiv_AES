@@ -1,10 +1,10 @@
 SHELL=/bin/bash
 CC = /usr/bin/gcc
 
-exp1: check_affine check_multiply check_inverse check_aes_all
+exp1: check_affine check_multiply check_inverse check_aes
 	@echo done
 
-check_aes_all: aes_exp1 
+check_aes: aes_exp1 
 	@diff ./test1.res.txt <(./exp1)  >/dev/null || echo 'ALL TEST FAILED'
 
 # 関数ごとのテスト
@@ -35,11 +35,11 @@ test_inverse: aes.o test_multiply
 
 aes_exp1: aes.o
 	$(CC) -o exp1 \
-			aes.o cipherH.o subbytes.o shiftrows.o \
-			mixcolumns.o addroundkey.o keyexpand1.o debug.o test1.o
+		aes.o cipherH.o subbytes.o shiftrows.o \
+		mixcolumns.o addroundkey.o keyexpand1.o debug.o test1.o
 
 aes.o:	aes.c
 	$(CC) -c aes.c
 
 clean:
-	rm  exp1 aes.o test_affine test_inverse test_multiply 
+	rm exp1 aes.o test_affine test_inverse test_multiply 
