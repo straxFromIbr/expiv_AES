@@ -1,11 +1,10 @@
-#include <stdio.h>
-
 #include "aes128.h"
+#include <stdio.h>
 
 int main(void) {
   printf("unsigned char mbox02[256] = {");
 
-  for (int b = 0; b <= 254; b++) {
+  for (unsigned char b = 0; b <= 254; b++) {
     printf("0x%02X, ", Multiply(b, 0x02));
   }
 

@@ -1,6 +1,5 @@
-#include <stdio.h>
-
 #include "aes128.h"
+#include <stdio.h>
 
 int main(void) {
   unsigned char temp, res;
