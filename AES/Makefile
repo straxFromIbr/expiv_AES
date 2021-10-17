@@ -4,6 +4,7 @@ BIN = bin
 basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
 base_sm_files = $(basefiles) subbytes.o mixcolumns.o
 TESTER = test1.o
+RESULT_FILE = "result_"$$(hostname -I | awk '{print$1}')
 
 to_test1:
 	$(eval TESTER := test1.o)
@@ -32,21 +33,15 @@ test_exp2_all: to_test1  exp2_11 exp2_12 exp2_21 exp2_22
 
 # タイム計測
 exp2_time: to_test2 exp2_11 exp2_12 exp2_21 exp2_22
-	@echo 'EXP2_11'
-	@echo '-------------'
-	@time $(BIN)/exp2_11 >/dev/null
-	@echo -e '\n\n'
-	@echo 'EXP2_12'
-	@echo '-------------'
-	@time $(BIN)/exp2_12 >/dev/null
-	@echo -e '\n\n'
-	@echo 'EXP2_21'
-	@echo '-------------'
-	@time $(BIN)/exp2_21 >/dev/null
-	@echo -e '\n\n'
-	@echo 'EXP2_22'
-	@echo '-------------'
-	@time $(BIN)/exp2_22 >/dev/null
+	@touch ${RESULT_FILE}
+	@echo 'EXP2_11' | tee ${RESULT_FILE}
+	@(time $(BIN)/exp2_11 1>/dev/null ) 2>&1 | tee -a ${RESULT_FILE}
+	@echo 'EXP2_12'| tee -a ${RESULT_FILE}
+	@(time $(BIN)/exp2_12 1>/dev/null ) 2>&1 | tee -a ${RESULT_FILE}
+	@echo 'EXP2_21'| tee -a ${RESULT_FILE}
+	@(time $(BIN)/exp2_21 1>/dev/null ) 2>&1 | tee -a ${RESULT_FILE}
+	@echo 'EXP2_22'| tee -a ${RESULT_FILE}
+	@(time $(BIN)/exp2_22 1>/dev/null ) 2>&1 | tee -a ${RESULT_FILE}
 
 
 
