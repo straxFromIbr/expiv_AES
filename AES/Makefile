@@ -1,44 +1,51 @@
 SHELL=/bin/bash
 CC = /usr/bin/cc
 BIN = bin
-basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o 
-base_sm_files = $(basefiles) subbytes.o mixcolumns.o 
+basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
+base_sm_files = $(basefiles) subbytes.o mixcolumns.o
 TESTER = test1.o
 
-to_test1: 
+to_test1:
 	$(eval TESTER := test1.o)
 
-to_test2: 
+to_test2:
 	$(eval TESTER := test2.o)
 
 
 # 実験1:関数ごとのテストとaes.cのテストを全て実行
 test_exp1_all: to_test1 check_affine check_multiply check_inverse check_aes
 	@echo done
-	
 
 # 実験2:
 # 出力のチェック
 test_exp2_all: to_test1  exp2_11 exp2_12 exp2_21 exp2_22
 	@set pipefaile
 	@echo -n "EXP2_11 : "
-	@diff ./test1.res.txt <($(BIN)/exp2_11) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./test1.res.txt <($(BIN)/exp2_11) >/dev/null && echo 'passed'|| echo 'FAILED'
 	@echo -n "EXP2_12 : "
-	@diff ./test1.res.txt <($(BIN)/exp2_12) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./test1.res.txt <($(BIN)/exp2_12) >/dev/null && echo 'passed'|| echo 'FAILED'
 	@echo -n "EXP2_21 : "
-	@diff ./test1.res.txt <($(BIN)/exp2_21) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./test1.res.txt <($(BIN)/exp2_21) >/dev/null && echo 'passed'|| echo 'FAILED'
 	@echo -n "EXP2_22 : "
-	@diff ./test1.res.txt <($(BIN)/exp2_22) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./test1.res.txt <($(BIN)/exp2_22) >/dev/null && echo 'passed'|| echo 'FAILED'
 	
+
 # タイム計測
-measure_exp2_all: to_test2 exp2_11 exp2_12 exp2_21 exp2_22
-	@echo EXP2_11
+exp2_time: to_test2 exp2_11 exp2_12 exp2_21 exp2_22
+	@echo 'EXP2_11'
+	@echo '-------------'
 	@time $(BIN)/exp2_11 >/dev/null
-	@echo EXP2_12
+	@echo -e '\n\n'
+	@echo 'EXP2_12'
+	@echo '-------------'
 	@time $(BIN)/exp2_12 >/dev/null
-	@echo EXP2_21
+	@echo -e '\n\n'
+	@echo 'EXP2_21'
+	@echo '-------------'
 	@time $(BIN)/exp2_21 >/dev/null
-	@echo EXP2_22
+	@echo -e '\n\n'
+	@echo 'EXP2_22'
+	@echo '-------------'
 	@time $(BIN)/exp2_22 >/dev/null
 
 
@@ -56,22 +63,21 @@ exp2_12: aes.o gen_boxes mixcolumns_lut
 		$(basefiles) \
 		keyexpand1.o \
 		subbytes.o mixcolumns_lut.o mbox02.o mbox03.o \
-		$(TESTER) 
-
+		$(TESTER)
 
 exp2_21: aes.o gen_boxes subbytes_lut
 	$(CC) -o $(BIN)/exp2_21 \
 		$(basefiles) \
 		keyexpand2.o \
 		subbytes_lut.o sbox.o mixcolumns.o \
-		$(TESTER) 
+		$(TESTER)
 
 exp2_22: aes.o gen_boxes subbytes_lut mixcolumns_lut
 	$(CC) -o $(BIN)/exp2_22 \
 		$(basefiles) \
 		keyexpand2.o \
 		subbytes_lut.o sbox.o mixcolumns_lut.o mbox02.o mbox03.o \
-		$(TESTER) 
+		$(TESTER)
 
 gen_boxes: gen_sbox gen_mbox02 gen_mbox03
 	@$(BIN)/gen_sbox > sbox.c
@@ -90,7 +96,7 @@ check_aes: to_test1 aes
 ## 実験1:関数ごとのテスト
 check_affine: to_test1 test_affine
 	@echo -n 'AFFINE : '
-	@diff ./testAffine.res.txt <($(BIN)/test_affine) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./testAffine.res.txt <($(BIN)/test_affine) >/dev/null && echo 'passed'|| echo 'FAILED'
 
 check_multiply: to_test1 test_multiply
 	@echo -n 'MULTIPLY : '
@@ -99,14 +105,14 @@ check_multiply: to_test1 test_multiply
 
 check_inverse: to_test1 test_inverse
 	@echo -n 'INVERSE : '
-	@diff ./testInverse.res.txt <($(BIN)/test_inverse) >/dev/null && echo 'passed'|| echo 'FAILED' 
+	@diff ./testInverse.res.txt <($(BIN)/test_inverse) >/dev/null && echo 'passed'|| echo 'FAILED'
 
 
 # 実験1:関数ごとのテスト実行ファイルのコンパイル
 test_affine: aes
 	@$(CC) -o $(BIN)/test_affine \
 		$(base_sm_files) keyexpand1.o \
-		testAffine.o 
+		testAffine.o
 
 test_multiply: aes
 	@$(CC) -o $(BIN)/test_multiply \
