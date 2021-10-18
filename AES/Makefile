@@ -1,6 +1,6 @@
-SHELL=/bin/bash
-CC = /usr/bin/cc
-BIN = bin
+SHELL = /bin/bash
+CC = /bin/cc
+BIN = ./bin
 basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
 base_sm_files = $(basefiles) subbytes.o mixcolumns.o
 TESTER = test1.o
@@ -21,7 +21,7 @@ version_info:
 	@make --version >> $(VERSION_FILE)
 
 # ====================================
-#
+
 # 実験1:関数ごとのテストとaes.cのテストを全て実行
 test_exp1_all: to_test1 check_affine check_multiply check_inverse check_aes
 	@echo done
