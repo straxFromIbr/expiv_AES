@@ -4,15 +4,24 @@ BIN = bin
 basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
 base_sm_files = $(basefiles) subbytes.o mixcolumns.o
 TESTER = test1.o
-RESULT_FILE = "result_"$$(hostname -I | awk '{print$$1}')
+RESULT_FILE = "result_"$$(hostname -I | awk '{print$$1}')".txt"
+VERSION_FILE = "version_"$$(hostname -I | awk '{print$$1}')".txt"
 
+
+# ============== Utils ==============
 to_test1:
 	$(eval TESTER := test1.o)
 
 to_test2:
 	$(eval TESTER := test2.o)
 
+version_info:
+	@$(SHELL) --version > $(VERSION_FILE)
+	@$(CC) --version >> $(VERSION_FILE)
+	@make --version >> $(VERSION_FILE)
 
+# ====================================
+#
 # 実験1:関数ごとのテストとaes.cのテストを全て実行
 test_exp1_all: to_test1 check_affine check_multiply check_inverse check_aes
 	@echo done
@@ -44,45 +53,7 @@ exp2_time: to_test2 exp2_11 exp2_12 exp2_21 exp2_22
 	@(time $(BIN)/exp2_22 1>/dev/null ) 2>&1 | tee -a ${RESULT_FILE}
 
 
-
-# 実験2:関数の組み合わせを変えた実行ファイルのコンパイル
-exp2_11: aes.o
-	$(CC) -o $(BIN)/exp2_11 \
-		$(basefiles) \
-		keyexpand1.o  \
-		subbytes.o mixcolumns.o \
-		$(TESTER)
-
-exp2_12: aes.o gen_boxes mixcolumns_lut
-	$(CC) -o $(BIN)/exp2_12 \
-		$(basefiles) \
-		keyexpand1.o \
-		subbytes.o mixcolumns_lut.o mbox02.o mbox03.o \
-		$(TESTER)
-
-exp2_21: aes.o gen_boxes subbytes_lut
-	$(CC) -o $(BIN)/exp2_21 \
-		$(basefiles) \
-		keyexpand2.o \
-		subbytes_lut.o sbox.o mixcolumns.o \
-		$(TESTER)
-
-exp2_22: aes.o gen_boxes subbytes_lut mixcolumns_lut
-	$(CC) -o $(BIN)/exp2_22 \
-		$(basefiles) \
-		keyexpand2.o \
-		subbytes_lut.o sbox.o mixcolumns_lut.o mbox02.o mbox03.o \
-		$(TESTER)
-
-gen_boxes: gen_sbox gen_mbox02 gen_mbox03
-	@$(BIN)/gen_sbox > sbox.c
-	@$(BIN)/gen_mbox02 > mbox02.c
-	@$(BIN)/gen_mbox03 > mbox03.c
-	@$(CC) -c sbox.c
-	@$(CC) -c mbox02.c
-	@$(CC) -c mbox03.c
-
-# --------実験1---------
+# ==============実験1==================
 ## 実験1:aes.c全体のテスト
 check_aes: to_test1 aes
 	@echo -n 'AES : '
@@ -125,7 +96,46 @@ aes: aes.o
 		$(base_sm_files) keyexpand1.o \
 		$(TESTER)
 
-# --------実験2---------
+# =====================実験2=============================
+# 実験2:関数の組み合わせを変えた実行ファイルのコンパイル
+exp2_11: aes.o
+	$(CC) -o $(BIN)/exp2_11 \
+		$(basefiles) \
+		keyexpand1.o  \
+		subbytes.o mixcolumns.o \
+		$(TESTER)
+
+exp2_12: aes.o gen_boxes mixcolumns_lut
+	$(CC) -o $(BIN)/exp2_12 \
+		$(basefiles) \
+		keyexpand1.o \
+		subbytes.o mixcolumns_lut.o mbox02.o mbox03.o \
+		$(TESTER)
+
+exp2_21: aes.o gen_boxes subbytes_lut
+	$(CC) -o $(BIN)/exp2_21 \
+		$(basefiles) \
+		keyexpand2.o \
+		subbytes_lut.o sbox.o mixcolumns.o \
+		$(TESTER)
+
+exp2_22: aes.o gen_boxes subbytes_lut mixcolumns_lut
+	$(CC) -o $(BIN)/exp2_22 \
+		$(basefiles) \
+		keyexpand2.o \
+		subbytes_lut.o sbox.o mixcolumns_lut.o mbox02.o mbox03.o \
+		$(TESTER)
+
+# 実験2: 配列コード生成
+gen_boxes: gen_sbox gen_mbox02 gen_mbox03
+	@$(BIN)/gen_sbox > sbox.c
+	@$(BIN)/gen_mbox02 > mbox02.c
+	@$(BIN)/gen_mbox03 > mbox03.c
+	@$(CC) -c sbox.c
+	@$(CC) -c mbox02.c
+	@$(CC) -c mbox03.c
+
+
 gen_sbox: gen_sbox.o aes.o
 	$(CC) -o $(BIN)/gen_sbox \
 		gen_sbox.o aes.o
@@ -144,11 +154,12 @@ subbytes_lut:
 mixcolumns_lut:
 	$(CC) -c mixcolumns_lut.c
 
-# --------共通----------
+# =============================共通=====================================
 
 aes.o:	aes.c
 	$(CC) -c aes.c
 
+# ============================================================
 
 .PHONY: clean
 clean:
