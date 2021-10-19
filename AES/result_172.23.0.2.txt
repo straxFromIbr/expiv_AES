@@ -1,0 +1,20 @@
+EXP2_11
+
+real	0m45.203s
+user	0m45.182s
+sys	0m0.017s
+EXP2_12
+
+real	0m43.895s
+user	0m43.876s
+sys	0m0.015s
+EXP2_21
+
+real	0m34.218s
+user	0m34.203s
+sys	0m0.009s
+EXP2_22
+
+real	0m33.653s
+user	0m33.634s
+sys	0m0.015s
