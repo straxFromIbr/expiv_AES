@@ -1,12 +1,3 @@
-# 暗号化プログラミングレポート
-
-# 目的
-- 広く利用されているAES暗号の暗号化プログラムを実装することで、対称ブロック暗号(symmetric block cipher)について学ぶ。
-- 平文と暗号文の線形性を壊すために、離散数学(ガロア体理論に基づくバイト演算)が応用されていることを学ぶ。
-- 暗号化で不可欠なビット演算のプログラミングを学ぶ。
-- 事前計算(precalculation)とルックアップテーブル(lookup table)を利用した高速化を学ぶ。
-
-----
 ## 実行環境
 Dockerを用いて実験の環境を構築した。比較のためにネイティブで動作するUbuntuでも動作の確認をした。
 1. OS: macOS 12.0.1 21A558 arm64
@@ -32,3 +23,6 @@ RUN apt update && \
     apt install gcc make -y
 CMD ["/usr/bin/bash","-l"]
 ```
+
+また実験に使用したソースコードやDockerfileなどは
+Gihubリポジトリ[straxFromIbr/expiv_AES](https://github.com/straxFromIbr/expiv_AES)に公開している。
