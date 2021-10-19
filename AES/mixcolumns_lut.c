@@ -18,8 +18,8 @@ void MixColumns(unsigned char state[4 * Nb]) {
         mbox03[state[i]] ^ state[i + 1] ^ state[i + 2] ^ mbox02[state[i + 3]];
 
     state[i] = res[i];
-    state[i+1] = res[i+1];
-    state[i+2] = res[i+2];
-    state[i+3] = res[i+3];
+    state[i + 1] = res[i + 1];
+    state[i + 2] = res[i + 2];
+    state[i + 3] = res[i + 3];
   }
 }
