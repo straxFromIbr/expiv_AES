@@ -66,19 +66,21 @@ Gihubリポジトリ<a href="https://github.com/straxFromIbr/expiv_AES">straxFro
 }
 
 <span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> <span class="hljs-title">Inverse</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> b)</span> </span>{
-  <span class="hljs-type">double</span> b2, b4, b8, b16, b32, b64, b128, b254;
+  <span class="hljs-comment">// Itoh–Tsujii inversion algorithm</span>
+  <span class="hljs-type">double</span> b2, b3, b6, b12, b14, b15, b30, b60, b120, b240, b254;
 
   b2 = <span class="hljs-built_in">Multiply</span>(b, b);
-  b4 = <span class="hljs-built_in">Multiply</span>(b2, b2);
-  b8 = <span class="hljs-built_in">Multiply</span>(b4, b4);
-  b16 = <span class="hljs-built_in">Multiply</span>(b8, b8);
-  b32 = <span class="hljs-built_in">Multiply</span>(b16, b16);
-  b64 = <span class="hljs-built_in">Multiply</span>(b32, b32);
-  b128 = <span class="hljs-built_in">Multiply</span>(b64, b64);
-  b254 = <span class="hljs-built_in">Multiply</span>(
-      <span class="hljs-built_in">Multiply</span>(<span class="hljs-built_in">Multiply</span>(<span class="hljs-built_in">Multiply</span>(<span class="hljs-built_in">Multiply</span>(<span class="hljs-built_in">Multiply</span>(b2, b4), b8), b16), b32),
-               b64),
-      b128);
+  b3 = <span class="hljs-built_in">Multiply</span>(b, b2);
+  b6 = <span class="hljs-built_in">Multiply</span>(b3, b3);
+  b12 = <span class="hljs-built_in">Multiply</span>(b6, b6);
+  b14 = <span class="hljs-built_in">Multiply</span>(b2, b12);
+  b15 = <span class="hljs-built_in">Multiply</span>(b3, b12);
+  b30 = <span class="hljs-built_in">Multiply</span>(b15, b15);
+  b60 = <span class="hljs-built_in">Multiply</span>(b30, b30);
+  b120 = <span class="hljs-built_in">Multiply</span>(b60, b60);
+  b240 = <span class="hljs-built_in">Multiply</span>(b120, b120);
+  b254 = <span class="hljs-built_in">Multiply</span>(b14, b240);
+
   <span class="hljs-keyword">return</span> b254;
 }
 
@@ -107,8 +109,20 @@ Gihubリポジトリ<a href="https://github.com/straxFromIbr/expiv_AES">straxFro
 }
 </code></pre>
 <h2 id="利用したinverseのアルゴリズム">利用した<code>Inverse</code>のアルゴリズム</h2>
-<p>上記の<code>aes.c</code>に示した通り、Inverse関数のアルゴリズムとして、資料に示されてる「計算方法2」を使用した。
-Multiply関数によりb2からb128まで求め、それらの積をとり、b254を計算した。</p>
+<p>伊藤辻井アルゴリズムと呼ばれる方式を使用した。逆元を求めたいバイトデータをbとするとき、このアルゴリズムは次の式で表される。なお<code>*</code>はMultiply関数による積を示す。</p>
+<pre><code>  b2 =    b *    b  
+  b3 =    b *   b2  
+  b6 =   b3 *   b3  
+ b12 =   b6 *   b6  
+ b14 =   b2 *  b12  
+ b15 =   b3 *  b12  
+ b30 =  b15 *  b15  
+ b60 =  b30 *  b30  
+b120 =  b60 *  b60  
+b240 = b120 * b120  
+b254 =  b14 * b240  
+</code></pre>
+<p>このアルゴリズムにより一度のInverseの処理を11回の積で実現できる。</p>
 <h2 id="affine関数のフローチャート"><code>Affine</code>関数のフローチャート</h2>
 <p><img src="mdsrc/img/affine_fc.png" alt="Affine関数フローチャート"></p>
 <h2 id="multiplyアルゴリズムの正当性"><code>Multiply</code>アルゴリズムの正当性</h2>
@@ -306,10 +320,14 @@ BIN = ./bin
 <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MixColumns</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> state[<span class="hljs-number">4</span> * Nb])</span> </span>{
   <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> res[<span class="hljs-number">4</span> * Nb];
   <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">12</span>; i += <span class="hljs-number">4</span>) {
-    res[i] = mbox02[state[i]] ^ mbox03[state[i + <span class="hljs-number">1</span>]] ^ state[i + <span class="hljs-number">2</span>] ^ state[i + <span class="hljs-number">3</span>];
-    res[i + <span class="hljs-number">1</span>] = state[i] ^ mbox02[state[i + <span class="hljs-number">1</span>]] ^ mbox03[state[i + <span class="hljs-number">2</span>]] ^ state[i + <span class="hljs-number">3</span>];
-    res[i + <span class="hljs-number">2</span>] = state[i] ^ state[i + <span class="hljs-number">1</span>] ^ mbox02[state[i + <span class="hljs-number">2</span>]] ^ mbox03[state[i + <span class="hljs-number">3</span>]];
-    res[i + <span class="hljs-number">3</span>] = mbox03[state[i]] ^ state[i + <span class="hljs-number">1</span>] ^ state[i + <span class="hljs-number">2</span>] ^ mbox02[state[i + <span class="hljs-number">3</span>]];
+    res[i] =
+        mbox02[state[i]] ^ mbox03[state[i + <span class="hljs-number">1</span>]] ^ state[i + <span class="hljs-number">2</span>] ^ state[i + <span class="hljs-number">3</span>];
+    res[i + <span class="hljs-number">1</span>] =
+        state[i] ^ mbox02[state[i + <span class="hljs-number">1</span>]] ^ mbox03[state[i + <span class="hljs-number">2</span>]] ^ state[i + <span class="hljs-number">3</span>];
+    res[i + <span class="hljs-number">2</span>] =
+        state[i] ^ state[i + <span class="hljs-number">1</span>] ^ mbox02[state[i + <span class="hljs-number">2</span>]] ^ mbox03[state[i + <span class="hljs-number">3</span>]];
+    res[i + <span class="hljs-number">3</span>] =
+        mbox03[state[i]] ^ state[i + <span class="hljs-number">1</span>] ^ state[i + <span class="hljs-number">2</span>] ^ mbox02[state[i + <span class="hljs-number">3</span>]];
 
     state[i] = res[i];
     state[i + <span class="hljs-number">1</span>] = res[i + <span class="hljs-number">1</span>];
@@ -420,13 +438,13 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 </thead>
 <tbody><tr>
 <td align="left">SubBytes(実験I)</td>
-<td align="right">0m48.585s (1.00)</td>
-<td align="right">0m46.625s (1.04)</td>
+<td align="right">45.182s(1.00)</td>
+<td align="right">43.876s(1.03)</td>
 </tr>
 <tr>
 <td align="left">SubBytes(実験II)</td>
-<td align="right">0m34.642s (1.40)</td>
-<td align="right">0m33.624s (1.44)</td>
+<td align="right">34.203s(1.32)</td>
+<td align="right">33.634s(1.34)</td>
 </tr>
 </tbody></table>
 <ul>
@@ -442,31 +460,32 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 </thead>
 <tbody><tr>
 <td align="left">SubBytes(実験I)</td>
-<td align="right">0m17.731s s(1.00)</td>
-<td align="right">0m16.138s (1.10)</td>
+<td align="right">12.947s(1.00)</td>
+<td align="right">11.354s(1.14)</td>
 </tr>
 <tr>
 <td align="left">SubBytes(実験II)</td>
-<td align="right">0m4.959s (3.58)</td>
-<td align="right">0m4.609s (3.85)</td>
+<td align="right">4.951s(2.62)</td>
+<td align="right">4.520s(2.86)</td>
 </tr>
 </tbody></table>
 <p>この結果を見ると、MixColumns関数を最適化すると最大でも1.1倍程度の速度向上であるのに対し、
-SubBytes関数にルックアップテーブルを適用するとDockerコンテナ上では1.4倍、
-ネイティブなLinuxでは3.5倍速度が向上していることがわかる。</p>
+SubBytes関数にルックアップテーブルを適用するとDockerコンテナ上では1.3倍、
+ネイティブなLinuxでは2.6倍速度が向上していることがわかる。
+その差について考察する。</p>
 <p>Cipherサブルーチン内部でSubBytes関数とMixColumns関数を呼び出す回数の差は、サブルーチンの最終回にSubBytes
 が呼ばれMixColumnsが呼ばれない点だけであるため、
 ２つの関数の内部の計算について検討する。特に内部で呼び出しているaes.cで定義された関数が、
 配列変数へのアクセスやビット演算に比べ計算コストが高いと思われるため、それらの関数の呼び出し回数について調べる。</p>
 <p>資料中のSubBytes関数の擬似コードを見ると、内部でInverse関数とAffine関数を16回ずつ呼び出していることがわかる。
-さらにInverse関数は今回の実装では内部でMultiply関数を13回呼び出している。
-そのため合計でMultiply関数を208回とAffine関数を16回呼び出している。</p>
-<p>一方MixColumns関数は主だった処理としてはMultiply関数を128回呼び出しているにすぎない。</p>
-<p>よってSubBytes関数がMultiply関数を80回多く、Affine関数を16回多く呼び出していることが
+さらにInverse関数は今回の実装ではMultiply関数を11回呼び出している。
+そのため合計でMultiply関数を176回とAffine関数を16回呼び出している。</p>
+<p>一方MixColumns関数は主だった処理としてはMultiply関数を128回呼び出している。</p>
+<p>よってSubBytes関数がMultiply関数を48回多く、Affine関数を16回多く呼び出していることが
 高速化に差がある原因だと考えられる。</p>
 <!-- 
 * SubBytes : InverseとAffineを16回
-  * Inverse: Multiplyを13回 -> 208回
+  * Inverse: Multiplyを11回 -> 176回
 * MixColumns : Multiplyを8*16回 -> 128回
 -->
 
