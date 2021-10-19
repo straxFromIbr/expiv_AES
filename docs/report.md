@@ -26,7 +26,7 @@ Dockerを用いて実験の環境を構築した。比較のためにネイテ�
     - cc: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
     - make: GNU Make 4.2.1
 
-コンテナは次のファイルを用い、フラグとして`--platform='linux/amd64'`を指定しビルドした。
+コンテナの作成には次のファイルを用い、フラグとして`--platform='linux/amd64'`を指定しビルドした。
 
 ```Dockerfile
 FROM ubuntu:latest
@@ -491,6 +491,10 @@ Cipherサブルーチン内部でSubBytes関数とMixColumns関数を呼び出�
 
 
 # 考察
+
+<!-- 
+実験の趣旨とは異なってしまうが
+ -->
 
 ---
 
