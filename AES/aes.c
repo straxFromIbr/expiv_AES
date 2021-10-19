@@ -47,6 +47,7 @@ unsigned char Affine(unsigned char b) {
   result_matrix[1] = 0xE3 & b;
   result_matrix[2] = 0xC7 & b;
   result_matrix[3] = 0x8F & b;
+
   result_matrix[4] = 0x1F & b;
   result_matrix[5] = 0x3E & b;
   result_matrix[6] = 0x7C & b;
