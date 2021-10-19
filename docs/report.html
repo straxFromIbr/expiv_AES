@@ -408,7 +408,8 @@ BIN = ./bin
 SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファイルとの
 速度の比率を次の表に示す。</p>
 <ul>
-<li><p>Docker</p>
+<li>Docker</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -428,8 +429,9 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 <td align="right">0m33.624s (1.44)</td>
 </tr>
 </tbody></table>
-</li>
-<li><p>ネイティブなLinux</p>
+<ul>
+<li>ネイティブなLinux</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -449,8 +451,6 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 <td align="right">0m4.609s (3.85)</td>
 </tr>
 </tbody></table>
-</li>
-</ul>
 <p>この結果を見ると、MixColumns関数を最適化すると最大でも1.1倍程度の速度向上であるのに対し、
 SubBytes関数にルックアップテーブルを適用するとDockerコンテナ上では1.4倍、
 ネイティブなLinuxでは3.5倍速度が向上していることがわかる。</p>

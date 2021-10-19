@@ -110,6 +110,8 @@ unsigned char Affine(unsigned char b) {
 
 ## 利用した`Inverse`のアルゴリズム
 上記の`aes.c`に示した通り、Inverse関数のアルゴリズムとして、資料に示されてる「計算方法2」を使用した。
+Multiply関数によりb2からb128まで求め、それらの積をとり、b254を計算した。
+
 
 ## `Affine`関数のフローチャート
 ![Affine関数フローチャート](mdsrc/img/affine_fc.png)
@@ -432,7 +434,7 @@ unsigned char mbox03[256] = {
 
 ```
 
-## 高速化率
+## 高速化率の比較
 
 `time`コマンドを使用して計測した`user`タイムと, 
 SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファイルとの
@@ -445,7 +447,7 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 | SubBytes(実験I)  |  0m48.585s (1.00) |   0m46.625s (1.04) |
 | SubBytes(実験II) |  0m34.642s (1.40) |   0m33.624s (1.44) |
 
-- ネイティブLinux
+- ネイティブなLinux
 |                  | MixColumns(実験I) | MixColumns(実験II) |
 | :--------------- | ----------------: | -----------------: |
 | SubBytes(実験I)  | 0m17.731s s(1.00) |   0m16.138s (1.10) |
