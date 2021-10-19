@@ -107,7 +107,8 @@ Gihubリポジトリ<a href="https://github.com/straxFromIbr/expiv_AES">straxFro
 }
 </code></pre>
 <h2 id="利用したinverseのアルゴリズム">利用した<code>Inverse</code>のアルゴリズム</h2>
-<p>上記の<code>aes.c</code>に示した通り、Inverse関数のアルゴリズムとして、資料に示されてる「計算方法2」を使用した。</p>
+<p>上記の<code>aes.c</code>に示した通り、Inverse関数のアルゴリズムとして、資料に示されてる「計算方法2」を使用した。
+Multiply関数によりb2からb128まで求め、それらの積をとり、b254を計算した。</p>
 <h2 id="affine関数のフローチャート"><code>Affine</code>関数のフローチャート</h2>
 <p><img src="mdsrc/img/affine_fc.png" alt="Affine関数フローチャート"></p>
 <h2 id="multiplyアルゴリズムの正当性"><code>Multiply</code>アルゴリズムの正当性</h2>
@@ -402,7 +403,7 @@ BIN = ./bin
     <span class="hljs-number">0x0B</span>, <span class="hljs-number">0x08</span>, <span class="hljs-number">0x0D</span>, <span class="hljs-number">0x0E</span>, <span class="hljs-number">0x07</span>, <span class="hljs-number">0x04</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x02</span>, <span class="hljs-number">0x13</span>, <span class="hljs-number">0x10</span>, <span class="hljs-number">0x15</span>, <span class="hljs-number">0x16</span>,
     <span class="hljs-number">0x1F</span>, <span class="hljs-number">0x1C</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0x1A</span>};
 </code></pre>
-<h2 id="高速化率">高速化率</h2>
+<h2 id="高速化率の比較">高速化率の比較</h2>
 <p><code>time</code>コマンドを使用して計測した<code>user</code>タイムと, 
 SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファイルとの
 速度の比率を次の表に示す。</p>
@@ -428,7 +429,7 @@ SubBytes, MixColumnsのどちらも実験Iのものを使用した実行ファ�
 </tr>
 </tbody></table>
 </li>
-<li><p>ネイティブLinux</p>
+<li><p>ネイティブなLinux</p>
 <table>
 <thead>
 <tr>
