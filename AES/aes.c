@@ -21,20 +21,21 @@ unsigned char Multiply(unsigned char x, unsigned char y) {
 }
 
 unsigned char Inverse(unsigned char b) {
-
-  double b2, b4, b8, b16, b32, b64, b128, b254;
+  // Itoh–Tsujii inversion algorithm
+  double b2, b3, b6, b12, b14, b15, b30, b60, b120, b240, b254;
 
   b2 = Multiply(b, b);
-  b4 = Multiply(b2, b2);
-  b8 = Multiply(b4, b4);
-  b16 = Multiply(b8, b8);
-  b32 = Multiply(b16, b16);
-  b64 = Multiply(b32, b32);
-  b128 = Multiply(b64, b64);
-  b254 = Multiply(
-      Multiply(Multiply(Multiply(Multiply(Multiply(b2, b4), b8), b16), b32),
-               b64),
-      b128);
+  b3 = Multiply(b, b2);
+  b6 = Multiply(b3, b3);
+  b12 = Multiply(b6, b6);
+  b14 = Multiply(b2, b12);
+  b15 = Multiply(b3, b12);
+  b30 = Multiply(b15, b15);
+  b60 = Multiply(b30, b30);
+  b120 = Multiply(b60, b60);
+  b240 = Multiply(b120, b120);
+  b254 = Multiply(b14, b240);
+
   return b254;
 }
 
