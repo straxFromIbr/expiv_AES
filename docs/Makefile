@@ -13,7 +13,7 @@ report:
 	@echo > $(REPORT_MD)
 	for mdf in $(MDBIN)/*.md ;\
 		cat $$mdf | $(PATH_CONV) >> $(REPORT_MD);\
-		echo -e '\n---\n' >> $(REPORT_MD);\
+		echo -e '\n\n---\n\n' >> $(REPORT_MD);\
 	end
 
 html: report
