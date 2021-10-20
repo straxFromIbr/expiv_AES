@@ -164,7 +164,6 @@ aes.o:	aes.c
 .PHONY: clean
 clean:
 	rm -f $(BIN)/* \
-		test_affine test_inverse test_multiply \
 		aes.o gen_sbox.o gen_mbox02.o gen_mbox03.o \
 		subbytes_lut.o mixcolumns_lut.o \
 		sbox.c mbox02.c mbox03.c \
