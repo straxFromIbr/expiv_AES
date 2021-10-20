@@ -1,20 +1,20 @@
 EXP2_11
 
-real	0m13.331s
-user	0m12.947s
-sys	0m0.266s
+real	0m6.107s
+user	0m6.038s
+sys	0m0.040s
 EXP2_12
 
-real	0m11.692s
-user	0m11.354s
-sys	0m0.250s
+real	0m5.899s
+user	0m5.811s
+sys	0m0.044s
 EXP2_21
 
-real	0m5.097s
-user	0m4.951s
-sys	0m0.103s
+real	0m4.809s
+user	0m4.750s
+sys	0m0.040s
 EXP2_22
 
-real	0m4.629s
-user	0m4.520s
-sys	0m0.092s
+real	0m4.388s
+user	0m4.376s
+sys	0m0.008s
