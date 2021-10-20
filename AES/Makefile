@@ -1,5 +1,5 @@
 SHELL = /bin/bash
-CC = /bin/cc
+CC = /bin/cc -O3
 BIN = ./bin
 basefiles = aes.o cipherH.o shiftrows.o  addroundkey.o debug.o
 base_sm_files = $(basefiles) subbytes.o mixcolumns.o
