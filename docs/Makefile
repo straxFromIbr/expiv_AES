@@ -20,7 +20,12 @@ html: report
 	md2html $(REPORT_MD) > $(REPORT_HTML)
 
 pdf: html
-	chrome --headless --print-to-pdf $(REPORT_HTML) && mv output.pdf $(REPORT_PDF)
+	chrome \
+		--headless\
+		--run-all-compositor-stages-before-draw \
+		--virtual-time-budget=10000 \
+		--print-to-pdf \
+		$(REPORT_HTML) && mv output.pdf $(REPORT_PDF)
 
 clean:
 	rm -f $(REPORT_HTML) $(REPORT_PDF) $(REPORT_MD)
