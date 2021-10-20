@@ -1,4 +1,4 @@
-## 実行環境
+### 実行環境
 Dockerを用いて実験の環境を構築した。比較のためにネイティブで動作するUbuntuでも動作の確認をした。
 1. OS: macOS 12.0.1 21A558 arm64
     - Docker: 20.10.8, build 3967b7d
@@ -24,5 +24,5 @@ RUN apt update && \
 CMD ["/usr/bin/bash","-l"]
 ```
 
-また実験に使用したソースコードやDockerfileなどは
-Gihubリポジトリ[straxFromIbr/expiv_AES](https://github.com/straxFromIbr/expiv_AES)に公開している。
+また実験に使用したソースコードやMakefileなどの全体は
+Gihubリポジトリ[expiv_AES](https://github.com/straxFromIbr/expiv_AES)に公開している。
