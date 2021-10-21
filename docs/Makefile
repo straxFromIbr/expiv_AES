@@ -28,4 +28,6 @@ pdf: html
 		$(REPORT_HTML) && mv output.pdf $(REPORT_PDF)
 
 clean:
-	rm -f $(REPORT_HTML) $(REPORT_PDF) $(REPORT_MD)
+	rm -f $(REPORT_HTML) $(REPORT_PDF) $(REPORT_MD) \
+		$(MDBIN)/*.html
+
