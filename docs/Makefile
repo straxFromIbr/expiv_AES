@@ -16,10 +16,10 @@ report:
 		echo -e '\n\n---\n\n' >> $(REPORT_MD);\
 	end
 
-html: report
-	md2html $(REPORT_MD) > $(REPORT_HTML)
+#html: report
+#	md2html $(REPORT_MD) > $(REPORT_HTML)
 
-pdf: html
+pdf: $(REPORT_HTML)
 	chrome \
 		--headless\
 		--run-all-compositor-stages-before-draw \
@@ -28,6 +28,5 @@ pdf: html
 		$(REPORT_HTML) && mv output.pdf $(REPORT_PDF)
 
 clean:
-	rm -f $(REPORT_HTML) $(REPORT_PDF) $(REPORT_MD) \
-		$(MDBIN)/*.html
+	rm -f $(REPORT_HTML) $(REPORT_PDF) $(REPORT_MD) 
 
