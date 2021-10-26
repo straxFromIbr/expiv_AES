@@ -1,13 +1,13 @@
 version: '3.3'
 services:
     aesdev:
-        image: exp6_aes
+        image: aesdev
         build:
           context: .
           dockerfile: ./Dockerfile
           args:
             - platform='linux/amd64'
-            - tag='exp6_aes'
+            - tag='aesdev'
         command: /bin/bash
         volumes:
             - './AES:/home'
